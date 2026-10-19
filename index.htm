@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+  <meta charset="UTF-8">
+  <title>උඩුගම සමෘද්ධි බැංකුව</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0e6f3b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="සමෘද්ධි බැංකුව">
+
+  <!-- Mobile App Home Screen Icons (Official Samurdhi Logo Vector) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M250 25 C145 25 58 100 45 200 C70 120 150 65 240 65 C320 65 395 115 425 185 C445 130 405 60 340 35 C310 28 280 25 250 25 Z' fill='%23111111'/%3E%3Cpath d='M15 270 C15 410 130 490 250 490 C370 490 485 410 485 270 L465 270 C465 395 360 470 250 470 C140 470 35 395 35 270 Z' fill='%23111111'/%3E%3Cpath d='M118 232 C125 320 220 360 295 368 C240 330 200 290 190 235 C175 255 140 255 118 232 Z' fill='%23e11d48'/%3E%3Ccircle cx='172' cy='268' r='16' fill='%23e11d48'/%3E%3Cpath d='M270 295 C300 370 335 435 345 440 C345 375 355 330 380 290 C345 285 305 285 270 295 Z' fill='%23e11d48'/%3E%3Ccircle cx='318' cy='295' r='15' fill='%23e11d48'/%3E%3Cpath d='M350 205 C380 270 435 340 455 395 C450 280 440 210 440 145 C395 190 370 200 350 205 Z' fill='%23e11d48'/%3E%3Ccircle cx='410' cy='212' r='17' fill='%23e11d48'/%3E%3C/svg%3E">
+  
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M250 25 C145 25 58 100 45 200 C70 120 150 65 240 65 C320 65 395 115 425 185 C445 130 405 60 340 35 C310 28 280 25 250 25 Z' fill='%23111111'/%3E%3Cpath d='M15 270 C15 410 130 490 250 490 C370 490 485 410 485 270 L465 270 C465 395 360 470 250 470 C140 470 35 395 35 270 Z' fill='%23111111'/%3E%3Cpath d='M118 232 C125 320 220 360 295 368 C240 330 200 290 190 235 C175 255 140 255 118 232 Z' fill='%23e11d48'/%3E%3Ccircle cx='172' cy='268' r='16' fill='%23e11d48'/%3E%3Cpath d='M270 295 C300 370 335 435 345 440 C345 375 355 330 380 290 C345 285 305 285 270 295 Z' fill='%23e11d48'/%3E%3Ccircle cx='318' cy='295' r='15' fill='%23e11d48'/%3E%3Cpath d='M350 205 C380 270 435 340 455 395 C450 280 440 210 440 145 C395 190 370 200 350 205 Z' fill='%23e11d48'/%3E%3Ccircle cx='410' cy='212' r='17' fill='%23e11d48'/%3E%3C/svg%3E">
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #0e6f3b;
+      --primary-dark: #094825;
+      --primary-light: #e8f5e9;
+      --danger: #e53935;
+      --danger-light: #ffebee;
+      --success: #2e7d32;
+      --bg: #f3f6f9;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans Sinhala', sans-serif;
+      margin: 0; padding: 0 0 80px 0; background: var(--bg); color: var(--text-main);
+    }
+    .app-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white; padding: 16px 18px 14px; border-radius: 0 0 22px 22px;
+      box-shadow: 0 8px 20px rgba(14, 111, 59, 0.22); position: sticky; top: 0; z-index: 100;
+    }
+    .header-content { display: flex; align-items: center; justify-content: space-between; }
+    .brand-group { display: flex; align-items: center; gap: 12px; }
+    .app-logo-badge {
+      width: 46px; height: 46px; background: white; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18); border: 2px solid #ffffff; padding: 3px;
+    }
+    .app-logo-badge svg { width: 100%; height: 100%; }
+    .header-title h1 { margin: 0; font-size: 18px; font-weight: 700; }
+    .header-title p { margin: 2px 0 0; font-size: 11.5px; opacity: 0.9; }
+    .btn-sync-header {
+      background: rgba(255,255,255,0.2); border: none; color: white;
+      padding: 8px 12px; border-radius: 10px; font-size: 12.5px; cursor: pointer;
+      display: flex; align-items: center; gap: 6px; font-weight: 600;
+    }
+    .container { padding: 14px 16px; }
+    .tab-nav { display: flex; background: #e2e8f0; padding: 4px; border-radius: 14px; margin-bottom: 16px; gap: 4px; }
+    .tab-btn {
+      flex: 1; padding: 10px 6px; border: none; border-radius: 10px; background: transparent;
+      color: var(--text-muted); font-size: 12.5px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+    }
+    .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .filter-card {
+      background: var(--card-bg); border-radius: var(--radius); padding: 16px;
+      box-shadow: var(--shadow); margin-bottom: 16px; border: 1px solid var(--border);
+    }
+    .search-input {
+      width: 100%; padding: 12px 14px 12px 40px; border: 1.5px solid var(--border);
+      border-radius: 12px; font-size: 14px; background: #f8fafc;
+    }
+    .filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    .filter-item { display: flex; flex-direction: column; gap: 4px; }
+    .filter-item label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+    .filter-select { padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 10px; background: #f8fafc; font-size: 12.5px; }
+    .acc-card {
+      background: var(--card-bg); border-radius: var(--radius); padding: 16px;
+      margin-bottom: 14px; box-shadow: var(--shadow); border: 1px solid var(--border);
+    }
+    .acc-header { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px dashed var(--border); padding-bottom: 8px; }
+    .acc-name-group h3 { margin: 0; font-size: 15px; font-weight: 700; }
+    .badge { padding: 5px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+    .badge-danger { background: var(--danger-light); color: var(--danger); }
+    .badge-warning { background: #fff8e1; color: #b78103; }
+    .badge-success { background: var(--primary-light); color: var(--primary); }
+    .acc-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 14px; }
+    .detail-col { display: flex; flex-direction: column; }
+    .detail-col span { font-size: 11px; color: var(--text-muted); }
+    .detail-col b { font-size: 14px; font-weight: 700; margin-top: 2px; }
+    .highlight-red { color: var(--danger); }
+    .highlight-green { color: var(--success); }
+    .acc-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .action-btn {
+      padding: 9px 8px; border-radius: 10px; border: none; font-size: 12px; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none;
+    }
+    .btn-call { background: #e0f2fe; color: #0284c7; }
+    .btn-wa { background: #dcfce7; color: #15803d; }
+    .btn-letter { background: #f1f5f9; color: #334155; }
+    .modal {
+      display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7);
+      justify-content: center; align-items: center; z-index: 1000; padding: 16px;
+    }
+    .modal-content {
+      background: white; width: 100%; max-width: 680px; border-radius: 18px; padding: 24px;
+      max-height: 88vh; overflow-y: auto;
+    }
+    .official-letterhead { display: flex; align-items: center; border-bottom: 2.5px solid #111; padding-bottom: 12px; margin-bottom: 16px; gap: 16px; }
+    .official-letterhead .lh-logo { width: 82px; height: 82px; flex-shrink: 0; }
+    .official-letterhead .lh-logo svg { width: 100%; height: 100%; }
+    .official-letterhead .lh-title-si { font-size: 18px; font-weight: 700; color: #0e6f3b; margin: 0; }
+    .official-letterhead .lh-title-en { font-size: 14px; font-weight: 700; margin: 2px 0 0; }
+    .official-letterhead .lh-title-ta { font-family: 'Noto Sans Tamil', sans-serif; font-size: 12.5px; margin: 2px 0 0; }
+    .official-letterhead .lh-contact { font-size: 11.5px; color: #475569; margin-top: 5px; display: flex; gap: 12px; }
+    @media print {
+      body * { visibility: hidden; }
+      .modal, .modal-content, .modal-content * { visibility: visible; }
+      .modal { position: absolute; left: 0; top: 0; width: 100%; background: none; }
+      .modal-actions { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-header">
+    <div class="header-content">
+      <div class="brand-group">
+        <div class="app-logo-badge">
+          <!-- Samurdhi Official Vector Emblem -->
+          <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M250 25 C145 25 58 100 45 200 C70 120 150 65 240 65 C320 65 395 115 425 185 C445 130 405 60 340 35 C310 28 280 25 250 25 Z" fill="#111111"/>
+            <path d="M15 270 C15 410 130 490 250 490 C370 490 485 410 485 270 L465 270 C465 395 360 470 250 470 C140 470 35 395 35 270 Z" fill="#111111"/>
+            <path d="M118 232 C125 320 220 360 295 368 C240 330 200 290 190 235 C175 255 140 255 118 232 Z" fill="#e11d48"/>
+            <circle cx="172" cy="268" r="16" fill="#e11d48"/>
+            <path d="M270 295 C300 370 335 435 345 440 C345 375 355 330 380 290 C345 285 305 285 270 295 Z" fill="#e11d48"/>
+            <circle cx="318" cy="295" r="15" fill="#e11d48"/>
+            <path d="M350 205 C380 270 435 340 455 395 C450 280 440 210 440 145 C395 190 370 200 350 205 Z" fill="#e11d48"/>
+            <circle cx="410" cy="212" r="17" fill="#e11d48"/>
+          </svg>
+        </div>
+        <div class="header-title">
+          <h1>උඩුගම සමෘද්ධි බැංකුව</h1>
+          <p>ණය කළමනාකරණ සහ අයකරගැනීමේ පද්ධතිය</p>
+        </div>
+      </div>
+      <button class="btn-sync-header" onclick="loadCloudData()">
+        <i class="fa-solid fa-rotate"></i> Sync
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="showTab('tab-search')"><i class="fa-solid fa-magnifying-glass"></i> සෙවීම</button>
+      <button class="tab-btn" onclick="showTab('tab-compare')"><i class="fa-solid fa-chart-line"></i> සතිපතා සැසඳීම</button>
+      <button class="tab-btn" onclick="showTab('tab-upload')"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+    </div>
+
+    <!-- TAB 1: SEARCH -->
+    <div id="tab-search" class="panel active">
+      <div class="filter-card">
+        <div style="position:relative;">
+          <i class="fa-solid fa-search" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text-muted);"></i>
+          <input type="text" id="searchKey" class="search-input" placeholder="ගිණුම් අංකය, නම හෝ දුරකථනය සොයන්න..." oninput="renderCards()">
+        </div>
+        <div class="filter-grid">
+          <div class="filter-item">
+            <label>වාර්තා දිනය</label>
+            <select id="searchReportDate" class="filter-select" onchange="renderCards()"></select>
+          </div>
+          <div class="filter-item">
+            <label>වසම (Wasam)</label>
+            <select id="searchWasam" class="filter-select" onchange="renderCards()"><option value="">සියලුම වසම්</option></select>
+          </div>
+          <div class="filter-item" style="grid-column: span 2;">
+            <label>කල්පසු වාරික සංඛ්‍යාව</label>
+            <select id="searchDueInstal" class="filter-select" onchange="renderCards()">
+              <option value="0">සියලුම ගිණුම්</option>
+              <option value="1">වාරික 1 ට වැඩි</option>
+              <option value="3">වාරික 3 ට වැඩි</option>
+              <option value="5">වාරික 5 ට වැඩි</option>
+              <option value="10">වාරික 10 ට වැඩි</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div id="cardsList"></div>
+    </div>
+
+    <!-- TAB 2: COMPARE -->
+    <div id="tab-compare" class="panel">
+      <div class="filter-card">
+        <div class="filter-grid">
+          <div class="filter-item">
+            <label>ආරම්භක දිනය (Start)</label>
+            <select id="cmpStart" class="filter-select" onchange="renderCompareList()"></select>
+          </div>
+          <div class="filter-item">
+            <label>අවසාන දිනය (End)</label>
+            <select id="cmpEnd" class="filter-select" onchange="renderCompareList()"></select>
+          </div>
+          <div class="filter-item" style="grid-column: span 2;">
+            <label>ගෙවීම් තත්ත්වය</label>
+            <select id="cmpStatus" class="filter-select" onchange="renderCompareList()">
+              <option value="ALL">සියලුම ගිණුම්</option>
+              <option value="PAID">✓ ණය මුදල් ගෙවූ අය පමණක්</option>
+              <option value="UNPAID">✗ මුදල් නොගෙවූ අය</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div id="compareCardsList"></div>
+    </div>
+
+    <!-- TAB 3: UPLOAD -->
+    <div id="tab-upload" class="panel">
+      <div class="filter-card" style="text-align:center; padding: 28px 18px;">
+        <i class="fa-solid fa-file-excel" style="font-size: 42px; color: var(--primary); margin-bottom: 12px;"></i>
+        <h3>නව සතිපතා Excel වාර්තාව</h3>
+        <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 18px;">Google Drive එකට දත්ත ස්වයංක්‍රීයව Save වේ.</p>
+        <input type="file" id="fileInput" accept=".xlsx, .xls" style="display:none;">
+        <button class="action-btn" style="background:var(--primary); color:white; width:100%; padding:12px;" onclick="document.getElementById('fileInput').click()">
+          <i class="fa-solid fa-arrow-up-from-bracket"></i> Excel File තෝරන්න
+        </button>
+        <div id="uploadStatus" style="margin-top:15px; font-weight:600; font-size:13px; color:var(--primary);"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LETTER MODAL -->
+  <div class="modal" id="letterModal">
+    <div class="modal-content">
+      <div id="printableContent"></div>
+      <div style="display:flex; gap:10px; margin-top:20px;" class="modal-actions">
+        <button class="action-btn" style="background:#e2e8f0; color:#334155; flex:1;" onclick="document.getElementById('letterModal').style.display='none'">වසන්න</button>
+        <button class="action-btn" style="background:var(--primary); color:white; flex:1;" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =============================================================
+    // පහත දක්වා ඇති ස්ථානයට ඔබගේ Google Apps Script Web App URL එක ඇතුළත් කරන්න:
+    // උදාහරණයක් ලෙස: const API_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
+    // =============================================================
+    const API_URL = "https://script.google.com/macros/s/AKfycbwTnTqzB0JT22YUKPDnslHD8E-w4E7KOK4abxKA4rmbszpslHZVWjCJoMEe5CSkheb6ag/exec";
+    // =============================================================
+
+    let cloudSnapshots = [];
+
+    function formatRs(v) {
+      return 'රු. ' + Number(v || 0).toLocaleString('en-LK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function showTab(id) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      document.getElementById(id).classList.add('active');
+    }
+
+    function loadCloudData() {
+      const syncBtn = document.querySelector('.btn-sync-header');
+      syncBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sync...';
+      
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          cloudSnapshots = data;
+          populateDropdowns();
+          renderCards();
+          renderCompareList();
+          syncBtn.innerHTML = '<i class="fa-solid fa-rotate"></i> Sync';
+        })
+        .catch(err => {
+          alert('දත්ත ලබාගැනීම අසාර්ථක විය: ' + err);
+          syncBtn.innerHTML = '<i class="fa-solid fa-rotate"></i> Sync';
+        });
+    }
+
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      document.getElementById('uploadStatus').textContent = 'Drive වෙත Upload වෙමින් පවතී...';
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const data = new Uint8Array(evt.target.result);
+        const wb = XLSX.read(data, { type: 'array' });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+
+        let reportDate = 'වාර්තාගත දිනය';
+        for (let r = 0; r < Math.min(rows.length, 10); r++) {
+          if (!rows[r]) continue;
+          for (let c = 0; c < rows[r].length; c++) {
+            if (String(rows[r][c] || '').trim().toLowerCase() === 'date') {
+              for (let k = c + 1; k < rows[r].length; k++) {
+                if (rows[r][k]) { reportDate = String(rows[r][k]).trim(); break; }
+              }
+              break;
+            }
+          }
+        }
+
+        const accounts = [];
+        for (let i = 11; i < rows.length; i++) {
+          const r = rows[i];
+          if (!r || !r[0] || String(r[0]).includes('Total Accounts')) continue;
+          accounts.push({
+            accNo: String(r[0] || '').trim(),
+            name: String(r[3] || '').trim(),
+            address: String(r[4] || '').trim(),
+            phone: String(r[5] || '').trim(),
+            approvedAmt: Number(r[9] || 0),
+            wasam: String(r[11] || '').trim(),
+            balance: Number(r[14] || 0),
+            instalAmt: Number(r[16] || 0),
+            instDue: Number(r[18] || 0),
+            days: Number(r[19] || 0),
+            dueAmt: Number(r[20] || 0)
+          });
+        }
+
+        fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify({ reportDate: reportDate, accounts: accounts })
+        })
+        .then(res => res.json())
+        .then(res => {
+          alert('සාර්ථකයි! ' + res.reportDate + ' දිනැති වාර්තාව Drive හි Save විය.');
+          document.getElementById('uploadStatus').textContent = '';
+          loadCloudData();
+          showTab('tab-search');
+        })
+        .catch(err => {
+          alert('Upload අසාර්ථක විය: ' + err);
+          document.getElementById('uploadStatus').textContent = '';
+        });
+      };
+      reader.readAsArrayBuffer(file);
+    });
+
+    function populateDropdowns() {
+      const sDate = document.getElementById('searchReportDate');
+      const cStart = document.getElementById('cmpStart');
+      const cEnd = document.getElementById('cmpEnd');
+      const sWasam = document.getElementById('searchWasam');
+
+      sDate.innerHTML = ''; cStart.innerHTML = ''; cEnd.innerHTML = '';
+      const wasams = new Set();
+
+      cloudSnapshots.forEach((s) => {
+        sDate.appendChild(new Option(s.reportDate, s.id));
+        cStart.appendChild(new Option(s.reportDate, s.id));
+        cEnd.appendChild(new Option(s.reportDate, s.id));
+        s.accounts.forEach(a => { if (a.wasam) wasams.add(a.wasam); });
+      });
+
+      if (cloudSnapshots.length >= 2) {
+        cStart.selectedIndex = 0;
+        cEnd.selectedIndex = cloudSnapshots.length - 1;
+      }
+      sWasam.innerHTML = '<option value="">සියලුම වසම්</option>';
+      Array.from(wasams).sort().forEach(w => sWasam.appendChild(new Option(w, w)));
+    }
+
+    function renderCards() {
+      const sId = document.getElementById('searchReportDate').value;
+      const snap = cloudSnapshots.find(s => s.id === sId);
+      const q = document.getElementById('searchKey').value.toLowerCase().trim();
+      const wasam = document.getElementById('searchWasam').value;
+      const minDue = parseFloat(document.getElementById('searchDueInstal').value) || 0;
+      const container = document.getElementById('cardsList');
+      container.innerHTML = '';
+
+      if (!snap) return;
+
+      const filtered = snap.accounts.filter(a => {
+        const mQ = !q || a.accNo.toLowerCase().includes(q) || a.name.toLowerCase().includes(q) || a.phone.includes(q);
+        const mW = !wasam || a.wasam === wasam;
+        const mD = a.instDue >= minDue;
+        return mQ && mW && mD;
+      });
+
+      filtered.forEach(a => {
+        let rawPhone = a.phone.replace(/[^0-9]/g, '');
+        let waPhone = rawPhone.startsWith('0') ? '94' + rawPhone.substring(1) : (rawPhone.length === 9 ? '94' + rawPhone : rawPhone);
+        const hasPhone = rawPhone.length >= 9 && rawPhone !== '0';
+
+        const waText = encodeURIComponent(
+          `ගරු ${a.name} මයා/මිය, උඩුගම සමෘද්ධි බැංකු ණය ගිණුම් අංක ${a.accNo} හි ${snap.reportDate} දිනට පවතින හිඟ මුදල රු. ${a.dueAmt.toLocaleString('en-LK')}/= කි. (වාරික ${a.instDue}). කරුණාකර කඩිනමින් බැංකුව හා සම්බන්ධ වී හිඟ මුදල ගෙවීමට කාරුණික වන්න.`
+        );
+
+        let badgeClass = a.instDue >= 5 ? 'badge-danger' : (a.instDue <= 1 ? 'badge-success' : 'badge-warning');
+
+        const card = document.createElement('div');
+        card.className = 'acc-card';
+        card.innerHTML = `
+          <div class="acc-header">
+            <div class="acc-name-group">
+              <h3>${a.name}</h3>
+              <span style="font-size:11.5px; color:var(--text-muted);"><i class="fa-solid fa-hashtag"></i> ${a.accNo} | ${a.wasam}</span>
+            </div>
+            <span class="badge ${badgeClass}">වාරික ${a.instDue}</span>
+          </div>
+          <div class="acc-details-grid">
+            <div class="detail-col"><span>වත්මන් ණය ශේෂය</span><b>${formatRs(a.balance)}</b></div>
+            <div class="detail-col"><span>හිඟ මුදල</span><b class="highlight-red">${formatRs(a.dueAmt)}</b></div>
+            <div class="detail-col"><span>ප්‍රමාද දින</span><b>${a.days} දින</b></div>
+            <div class="detail-col"><span>දුරකථන</span><b>${hasPhone ? a.phone : 'නැත'}</b></div>
+          </div>
+          <div class="acc-actions">
+            ${hasPhone ? `<a href="tel:${rawPhone}" class="action-btn btn-call"><i class="fa-solid fa-phone"></i> අමතන්න</a>` : `<button class="action-btn btn-call" style="opacity:0.4;"><i class="fa-solid fa-phone"></i> අමතන්න</button>`}
+            ${hasPhone ? `<a href="https://wa.me/${waPhone}?text=${waText}" target="_blank" class="action-btn btn-wa"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>` : `<button class="action-btn btn-wa" style="opacity:0.4;"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>`}
+            <button class="action-btn btn-letter" onclick="openDynamicLetter('${encodeURIComponent(JSON.stringify(a))}', '${snap.reportDate}')"><i class="fa-solid fa-file-lines"></i> ලිපිය</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderCompareList() {
+      const sId = document.getElementById('cmpStart').value;
+      const eId = document.getElementById('cmpEnd').value;
+      const statusFilter = document.getElementById('cmpStatus').value;
+      const snapStart = cloudSnapshots.find(s => s.id === sId);
+      const snapEnd = cloudSnapshots.find(s => s.id === eId);
+      const container = document.getElementById('compareCardsList');
+      container.innerHTML = '';
+
+      if (!snapStart || !snapEnd) return;
+
+      const startMap = new Map();
+      snapStart.accounts.forEach(a => startMap.set(a.accNo, a));
+
+      snapEnd.accounts.forEach(endAcc => {
+        const startAcc = startMap.get(endAcc.accNo);
+        const startBal = startAcc ? startAcc.balance : endAcc.balance;
+        const repaid = startBal > endAcc.balance ? (startBal - endAcc.balance) : 0;
+        const isPaid = repaid > 0;
+
+        if (statusFilter === 'PAID' && !isPaid) return;
+        if (statusFilter === 'UNPAID' && isPaid) return;
+
+        let rawPhone = endAcc.phone.replace(/[^0-9]/g, '');
+        const hasPhone = rawPhone.length >= 9 && rawPhone !== '0';
+
+        const card = document.createElement('div');
+        card.className = 'acc-card';
+        card.innerHTML = `
+          <div class="acc-header">
+            <div class="acc-name-group">
+              <h3>${endAcc.name}</h3>
+              <span style="font-size:11.5px; color:var(--text-muted);"><i class="fa-solid fa-hashtag"></i> ${endAcc.accNo} | ${endAcc.wasam}</span>
+            </div>
+            <span class="badge ${isPaid ? 'badge-success' : 'badge-danger'}">${isPaid ? '✓ ගෙවා ඇත' : '✗ ගෙවා නැත'}</span>
+          </div>
+          <div class="acc-details-grid">
+            <div class="detail-col"><span>මුල් ශේෂය</span><b>${formatRs(startBal)}</b></div>
+            <div class="detail-col"><span>වත්මන් ශේෂය</span><b>${formatRs(endAcc.balance)}</b></div>
+            <div class="detail-col"><span>ගෙවූ මුදල</span><b class="${isPaid ? 'highlight-green' : ''}">${isPaid ? '+ ' + formatRs(repaid) : 'රු. 0.00'}</b></div>
+            <div class="detail-col"><span>වත්මන් හිඟය</span><b class="highlight-red">${formatRs(endAcc.dueAmt)}</b></div>
+          </div>
+          <div class="acc-actions">
+            ${hasPhone ? `<a href="tel:${rawPhone}" class="action-btn btn-call"><i class="fa-solid fa-phone"></i> අමතන්න</a>` : ''}
+            <button class="action-btn btn-letter" onclick="openDynamicLetter('${encodeURIComponent(JSON.stringify(endAcc))}', '${snapEnd.reportDate}')"><i class="fa-solid fa-file-lines"></i> ලිපිය</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function openDynamicLetter(accStr, reportDate) {
+      const a = JSON.parse(decodeURIComponent(accStr));
+      const instDue = parseFloat(a.instDue) || 0;
+      const dueAmt = formatRs(a.dueAmt);
+      const accNo = a.accNo;
+      const name = a.name;
+      const address = a.address && a.address.trim() !== '-' ? a.address : 'ලිපිනය සටහන්ව නොමැත';
+
+      let letterTitle = '';
+      let letterBody = '';
+      let deliveryNote = '';
+      let levelBadge = '';
+
+      if (instDue >= 10) {
+        deliveryNote = 'ලියාපදිංචි තැපෑලෙන් / අතින් භාරදීමට';
+        levelBadge = '<span style="background:#fee2e2; color:#991b1b; padding:4px 8px; border-radius:6px; font-size:12px; font-weight:bold;">4 වන මට්ටම: වාරික 10 ට වැඩි</span>';
+        letterTitle = 'අවසන් නිවේදනයයි: පැහැර හරින ලද සමස්ත ණය මුදල නීතිමය මඟින් අය කර ගැනීම';
+        letterBody = `<p>ඔබ විසින් උඩුගම සමෘද්ධි බැංකුවෙන් ලබාගන්නා ලද ණය පහසුකම වෙනුවෙන් වාරික 10කට අධික සංඛ්‍යාවක් මාස ගණනාවක් මුළුල්ලේ හිතාමතා පැහැර හරිමින් සිටින අතර, මේ වන විට මුළු හිඟ මුදල <b>${dueAmt}</b> කි.</p><p>මෙයින් ඔබට අවසන් වරට දන්වා සිටින්නේ, මෙම ලිපිය ලද දින සිට <b>පැය 72ක් (දින 03ක්) ඇතුළත</b> සම්පූර්ණ හිඟ මුදල එකවර ගෙවා ගිණුම නිරවුල් කිරීමට කටයුතු කරන ලෙසයි.</p>`;
+      } else if (instDue >= 5) {
+        deliveryNote = 'ලියාපදිංචි තැපෑලෙන්';
+        levelBadge = '<span style="background:#ffedd5; color:#9a3412; padding:4px 8px; border-radius:6px; font-size:12px; font-weight:bold;">3 වන මට්ටම: වාරික 5 ට වැඩි</span>';
+        letterTitle = 'හිඟ ණය වාරික අය කර ගැනීම පිළිබඳ දැඩි අවසන් නිවේදනයයි';
+        letterBody = `<p>ඔබ උඩුගම සමෘද්ධි බැංකුවෙන් ලබාගෙන ඇති ණය මුදල සඳහා <b>${dueAmt}</b> ක හිඟ මුදලකට අදාළව වාරික 05 කට අධික ප්‍රමාණයක් අඛණ්ඩව පැහැර හරිමින් සිටී.</p><p>මෙම ලිපිය ලද දින සිට <b>දින 07ක් ඇතුළත</b> සම්පූර්ණ හිඟ මුදල ගෙවා නිම කිරීමට පියවර ගන්න.</p>`;
+      } else if (instDue >= 3) {
+        levelBadge = '<span style="background:#fef3c7; color:#92400e; padding:4px 8px; border-radius:6px; font-size:12px; font-weight:bold;">2 වන මට්ටම: වාරික 3 ට වැඩි</span>';
+        letterTitle = 'හිඟ ණය වාරික නොපමාව පියවීම පිළිබඳවයි - අවදානම් කාණ්ඩය';
+        letterBody = `<p>ඔබ උඩුගම සමෘද්ධි බැංකුව මඟින් ලබාගෙන ඇති ණය පහසුකම සඳහා <b>${dueAmt}</b> ක වටිනාකමකින් යුත් වාරික 03 කට අධික ප්‍රමාණයක් අඛණ්ඩව ගෙවීම පැහැර හැර ඇත.</p><p>ලිපිය ලැබී <b>දින 14 ක් ඇතුළත</b> හිඟ මුදල ගෙවීමට කටයුතු කරන්න.</p>`;
+      } else {
+        levelBadge = '<span style="background:#dcfce7; color:#166534; padding:4px 8px; border-radius:6px; font-size:12px; font-weight:bold;">1 වන මට්ටම: වාරික 1 ට වැඩි</span>';
+        letterTitle = 'හිඟ ණය වාරිකය පියවීම පිළිබඳ මතක් කිරීමයි';
+        letterBody = `<p>ඔබ උඩුගම සමෘද්ධි බැංකුවෙන් ලබාගෙන ඇති ණය සඳහා <b>${dueAmt}</b> ක මුදලකට අදාළව එක් වාරිකයකට වැඩි ප්‍රමාණයක් පැහැර හැර ඇති බව නිරීක්ෂණය වේ. කඩිනමින් ගෙවීමට පියවර ගන්න.</p>`;
+      }
+
+      const letterHtml = `
+        <div style="font-family:'Noto Sans Sinhala', sans-serif; line-height:1.6; color:#111;">
+          <div class="official-letterhead">
+            <div class="lh-logo">
+              <!-- Samurdhi Official Vector Logo -->
+              <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M250 25 C145 25 58 100 45 200 C70 120 150 65 240 65 C320 65 395 115 425 185 C445 130 405 60 340 35 C310 28 280 25 250 25 Z" fill="#111111"/>
+                <path d="M15 270 C15 410 130 490 250 490 C370 490 485 410 485 270 L465 270 C465 395 360 470 250 470 C140 470 35 395 35 270 Z" fill="#111111"/>
+                <path d="M118 232 C125 320 220 360 295 368 C240 330 200 290 190 235 C175 255 140 255 118 232 Z" fill="#e11d48"/>
+                <circle cx="172" cy="268" r="16" fill="#e11d48"/>
+                <path d="M270 295 C300 370 335 435 345 440 C345 375 355 330 380 290 C345 285 305 285 270 295 Z" fill="#e11d48"/>
+                <circle cx="318" cy="295" r="15" fill="#e11d48"/>
+                <path d="M350 205 C380 270 435 340 455 395 C450 280 440 210 440 145 C395 190 370 200 350 205 Z" fill="#e11d48"/>
+                <circle cx="410" cy="212" r="17" fill="#e11d48"/>
+              </svg>
+            </div>
+            <div class="lh-text">
+              <h2 class="lh-title-si">සමෘද්ධි බැංකුව - උඩුගම[cite: 2]</h2>
+              <div class="lh-title-en">SAMURDHI BANK - UDUGAMA[cite: 2]</div>
+              <div class="lh-title-ta">சமுர்த்தி வங்கி - உடுகம்[cite: 2]</div>
+              <div class="lh-contact">
+                <span>Email: divinegumaudugama@gmail.com[cite: 2]</span>
+                <span>TP: 0912285670[cite: 2]</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            ${levelBadge}
+            ${deliveryNote ? `<span style="font-size:12px; font-weight:bold; color:#b91c1c;">[ ${deliveryNote} ]</span>` : ''}
+          </div>
+          <table style="width:100%; border:none; margin-bottom:15px; font-size:13px;">
+            <tr><td style="border:none; padding:0;"><b>යොමුව:</b> USB/REC/${new Date().getFullYear()}</td><td style="border:none; padding:0; text-align:right;"><b>දිනය:</b> ${reportDate}</td></tr>
+          </table>
+          <div style="font-size:13.5px; margin-bottom:15px; background:#f8fafc; padding:10px; border-radius:8px;">
+            <b>නම:</b> ${name}<br><b>ලිපිනය:</b> ${address}<br><b>ණය ගිණුම් අංකය:</b> ${accNo}
+          </div>
+          <h3 style="text-align:center; text-decoration:underline; font-size:14.5px; margin:15px 0;">${letterTitle}</h3>
+          <div style="font-size:13.5px; text-align:justify;">${letterBody}</div>
+          <div style="margin-top:25px; font-size:13.5px;">මෙයට, විශ්වාසී,<br><br><b>කළමනාකරු / බලයලත් නිලධාරී</b><br>උඩුගම සමෘද්ධි බැංකුව</div>
+          <div style="margin-top:30px; font-size:11px; color:#64748b; border-top:1px dashed #cbd5e1; padding-top:6px; text-align:center;">(මෙය පරිගණකයෙන් මුද්‍රිත පිටපතක් බැවින් අත්සන අවශ්‍ය නොවේ.)</div>
+        </div>
+      `;
+
+      document.getElementById('printableContent').innerHTML = letterHtml;
+      document.getElementById('letterModal').style.display = 'flex';
+    }
+
+    window.onload = loadCloudData;
+  </script>
+</body>
+</html>
