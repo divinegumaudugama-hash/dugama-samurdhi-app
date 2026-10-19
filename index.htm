@@ -135,7 +135,7 @@
     <div class="header-content">
       <div class="brand-group">
         <div class="app-logo-badge">
-          <!-- Samurdhi Official Vector Emblem -->
+          <!-- Samurdhi Official Vector Emblem[cite: 1] -->
           <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M250 25 C145 25 58 100 45 200 C70 120 150 65 240 65 C320 65 395 115 425 185 C445 130 405 60 340 35 C310 28 280 25 250 25 Z" fill="#111111"/>
             <path d="M15 270 C15 410 130 490 250 490 C370 490 485 410 485 270 L465 270 C465 395 360 470 250 470 C140 470 35 395 35 270 Z" fill="#111111"/>
@@ -250,9 +250,8 @@
   <script>
     // =============================================================
     // පහත දක්වා ඇති ස්ථානයට ඔබගේ Google Apps Script Web App URL එක ඇතුළත් කරන්න:
-    // උදාහරණයක් ලෙස: const API_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
     // =============================================================
-    const API_URL = "https://script.google.com/macros/s/AKfycbwTnTqzB0JT22YUKPDnslHD8E-w4E7KOK4abxKA4rmbszpslHZVWjCJoMEe5CSkheb6ag/exec";
+    const API_URL = "ඔබේ_WEB_APP_URL_එක_මෙහි_දමන්න";
     // =============================================================
 
     let cloudSnapshots = [];
@@ -397,8 +396,9 @@
         let waPhone = rawPhone.startsWith('0') ? '94' + rawPhone.substring(1) : (rawPhone.length === 9 ? '94' + rawPhone : rawPhone);
         const hasPhone = rawPhone.length >= 9 && rawPhone !== '0';
 
+        // "ගරු" යන කොටස ඉවත් කර සෘජුවම නම ඇතුළත් කරන ලදී:
         const waText = encodeURIComponent(
-          `ගරු ${a.name} මයා/මිය, උඩුගම සමෘද්ධි බැංකු ණය ගිණුම් අංක ${a.accNo} හි ${snap.reportDate} දිනට පවතින හිඟ මුදල රු. ${a.dueAmt.toLocaleString('en-LK')}/= කි. (වාරික ${a.instDue}). කරුණාකර කඩිනමින් බැංකුව හා සම්බන්ධ වී හිඟ මුදල ගෙවීමට කාරුණික වන්න.`
+          `${a.name} මයා/මිය, උඩුගම සමෘද්ධි බැංකු ණය ගිණුම් අංක ${a.accNo} හි ${snap.reportDate} දිනට පවතින හිඟ මුදල රු. ${a.dueAmt.toLocaleString('en-LK')}/= කි. (වාරික ${a.instDue}). කරුණාකර කඩිනමින් බැංකුව හා සම්බන්ධ වී හිඟ මුදල ගෙවීමට කාරුණික වන්න.`
         );
 
         let badgeClass = a.instDue >= 5 ? 'badge-danger' : (a.instDue <= 1 ? 'badge-success' : 'badge-warning');
@@ -517,7 +517,7 @@
         <div style="font-family:'Noto Sans Sinhala', sans-serif; line-height:1.6; color:#111;">
           <div class="official-letterhead">
             <div class="lh-logo">
-              <!-- Samurdhi Official Vector Logo -->
+              <!-- Samurdhi Official Vector Logo[cite: 1] -->
               <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M250 25 C145 25 58 100 45 200 C70 120 150 65 240 65 C320 65 395 115 425 185 C445 130 405 60 340 35 C310 28 280 25 250 25 Z" fill="#111111"/>
                 <path d="M15 270 C15 410 130 490 250 490 C370 490 485 410 485 270 L465 270 C465 395 360 470 250 470 C140 470 35 395 35 270 Z" fill="#111111"/>
