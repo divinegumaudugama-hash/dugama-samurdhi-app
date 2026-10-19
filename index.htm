@@ -250,6 +250,7 @@
   <script>
     // =============================================================
     // පහත දක්වා ඇති ස්ථානයට ඔබගේ Google Apps Script Web App URL එක ඇතුළත් කරන්න:
+    // (අවසානයේ /exec ඇති බව තහවුරු කරගන්න)
     // =============================================================
     const API_URL = "https://script.google.com/macros/s/AKfycbzs_4q7ztcHBrLqjxc3C3BmDKhbBJ8Ye40x64340Fc40TEGxtwE2UBQu98iSpEcxeJzVg/exec";
     // =============================================================
@@ -267,25 +268,37 @@
       document.getElementById(id).classList.add('active');
     }
 
+    // දත්ත ලබාගැනීම (CORS & Google Redirection Handling)
     function loadCloudData() {
       const syncBtn = document.querySelector('.btn-sync-header');
       syncBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sync...';
-      
-      fetch(API_URL)
-        .then(res => res.json())
-        .then(data => {
-          cloudSnapshots = data;
-          populateDropdowns();
-          renderCards();
-          renderCompareList();
-          syncBtn.innerHTML = '<i class="fa-solid fa-rotate"></i> Sync';
-        })
-        .catch(err => {
-          alert('දත්ත ලබාගැනීම අසාර්ථක විය: ' + err);
-          syncBtn.innerHTML = '<i class="fa-solid fa-rotate"></i> Sync';
-        });
+
+      fetch(API_URL, {
+        method: 'GET',
+        redirect: 'follow'
+      })
+      .then(async res => {
+        const text = await res.text();
+        try {
+          return JSON.parse(text);
+        } catch (err) {
+          throw new Error("Google Script එකෙන් දත්ත ලැබී නැත. කරුණාකර Apps Script Permission 'Anyone' කර ඇත්දැයි බලන්න.");
+        }
+      })
+      .then(data => {
+        cloudSnapshots = data || [];
+        populateDropdowns();
+        renderCards();
+        renderCompareList();
+        syncBtn.innerHTML = '<i class="fa-solid fa-rotate"></i> Sync';
+      })
+      .catch(err => {
+        alert('දත්ත ලබාගැනීම අසාර්ථක විය:\n' + err.message);
+        syncBtn.innerHTML = '<i class="fa-solid fa-rotate"></i> Sync';
+      });
     }
 
+    // ගොනුව Upload කිරීම (POST Request)
     document.getElementById('fileInput').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -332,13 +345,14 @@
 
         fetch(API_URL, {
           method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ reportDate: reportDate, accounts: accounts })
         })
-        .then(res => res.json())
-        .then(res => {
-          alert('සාර්ථකයි! ' + res.reportDate + ' දිනැති වාර්තාව Drive හි Save විය.');
+        .then(() => {
+          alert('සාර්ථකයි! ' + reportDate + ' දිනැති වාර්තාව Drive හි Save විය.');
           document.getElementById('uploadStatus').textContent = '';
-          loadCloudData();
+          setTimeout(loadCloudData, 1500);
           showTab('tab-search');
         })
         .catch(err => {
@@ -396,7 +410,6 @@
         let waPhone = rawPhone.startsWith('0') ? '94' + rawPhone.substring(1) : (rawPhone.length === 9 ? '94' + rawPhone : rawPhone);
         const hasPhone = rawPhone.length >= 9 && rawPhone !== '0';
 
-        // "ගරු" යන කොටස ඉවත් කර සෘජුවම නම ඇතුළත් කරන ලදී:
         const waText = encodeURIComponent(
           `${a.name} මයා/මිය, උඩුගම සමෘද්ධි බැංකු ණය ගිණුම් අංක ${a.accNo} හි ${snap.reportDate} දිනට පවතින හිඟ මුදල රු. ${a.dueAmt.toLocaleString('en-LK')}/= කි. (වාරික ${a.instDue}). කරුණාකර කඩිනමින් බැංකුව හා සම්බන්ධ වී හිඟ මුදල ගෙවීමට කාරුණික වන්න.`
         );
